@@ -1,0 +1,27 @@
+.add-camera {
+  /* backgroundColor: "#1E77BD",
+          border: "none",
+          padding: "12px",
+          paddingInline: "42px",
+          color: "white",
+          borderRadius: "10px",
+          cursor: "pointer", */
+
+  background-color: #6c63ff;
+  border: none;
+  padding: 12px;
+  padding-inline: 42px;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: box-shadow 200ms;
+  transition: background-color 200ms;
+}
+.add-camera:hover {
+  background-color: rgb(75, 69, 177);
+  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
+    0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+}
+.add-camera:active {
+  transform: scale(0.9);
+}
