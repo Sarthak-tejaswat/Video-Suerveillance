@@ -9,6 +9,7 @@ import LogoutTwoToneIcon from "@mui/icons-material/LogoutTwoTone";
 import { logOutUser } from "../../../reducers/userSlice";
 import { useDispatch } from "react-redux";
 import { styled } from "@mui/material/styles";
+import { red } from "@mui/material/colors";
 
 const intModel = [
   { name: "CROWD AND COUNTING DETECTION", serialno: 1 },
@@ -109,7 +110,6 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 export default function IntelligentModel() {
-  const [active, setActive] = useState(false);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -218,7 +218,9 @@ export default function IntelligentModel() {
           </span>
         </div>
         {intModel.map((a, i) => (
-          <Section serialno={a.serialno}>{a.name}</Section>
+          <Section key={a.serialno} serialno={a.serialno}>
+            {a.name}
+          </Section>
         ))}
       </div>
     </div>
@@ -226,6 +228,7 @@ export default function IntelligentModel() {
 }
 
 function Section({ serialno, children }) {
+  const [active, setActive] = useState(false);
   const [color, setColor] = useState("#3EC70B");
   let buttonStyle = {
     width: "125px",
@@ -233,6 +236,17 @@ function Section({ serialno, children }) {
     marginLeft: "0",
     border: "none",
     backgroundColor: color,
+    color: "white",
+    paddingBlock: "10px",
+    borderRadius: "10px",
+    cursor: "pointer",
+  };
+  let newButton = {
+    width: "125px",
+    textAlign: "center",
+    marginLeft: "0",
+    border: "none",
+    backgroundColor: "red",
     color: "white",
     paddingBlock: "10px",
     borderRadius: "10px",
@@ -258,11 +272,12 @@ function Section({ serialno, children }) {
           }}
         >
           <button
-            style={buttonStyle}
+            style={active ? buttonStyle : newButton}
             onMouseEnter={() => setColor("#059212")}
             onMouseLeave={() => setColor("#3EC70B")}
+            onClick={() => setActive(() => !active)}
           >
-            Active
+            {active ? "Activated" : "Deactivated"}
           </button>
         </div>
       </div>

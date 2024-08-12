@@ -135,6 +135,7 @@ class flask_api(threading.Thread):
             email = data['email']
             user_id = data['id']
             token = data['token']
+            print(token)
             first_name = data["firstName"]
             last_name = data['lastName']
             role = data['role']
@@ -171,6 +172,7 @@ class flask_api(threading.Thread):
         def get_user():
             try:
                 data = self.db_helper.get_user_details()
+                
                 return jsonify(email=data[0],userId = data[1],role=data[2],token=data[3],firstName=data[4],lastName=data[5])
             except Exception as e:
                 print(e)

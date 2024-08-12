@@ -21,10 +21,11 @@ export default function MainListItems({ setOpen }) {
     display: "flex",
     flexDirection: "column",
     height: "100px",
-    marginBlock: "auto",
+    marginTop: "20vh",
+    // marginBlock: "auto",
     marginInline: "10px",
     paddingBlock: "20px",
-    backgroundColor: "#433D8B",
+    backgroundColor: "rgba(255,255,255,0.1)",
     "&:hover": {
       backgroundColor: "#17153B",
       transform: "scale(1.08)",
@@ -68,7 +69,7 @@ export default function MainListItems({ setOpen }) {
         </ListItemIcon>
         <ListItemText primary="Intrusions" sx={{ color: "white" }} />
       </ListItemButton>
-      {/* <ListItemButton
+      <ListItemButton
         onClick={() => routeToPage(DASHBOARD_ROUTES.PROCESSEDVIDEOS)}
         sx={boxStyle}
       >
@@ -78,8 +79,8 @@ export default function MainListItems({ setOpen }) {
           </Box>
         </ListItemIcon>
         <ListItemText primary="Detected Intrusion" sx={{ color: "white" }} />
-      </ListItemButton> */}
-      <ListItemButton // added something
+      </ListItemButton>
+      {/* <ListItemButton // added something
         onClick={() => {
           return routeToPage(DASHBOARD_ROUTES.HISTORY);
           setOpen(false);
@@ -92,7 +93,7 @@ export default function MainListItems({ setOpen }) {
           </Box>
         </ListItemIcon>
         <ListItemText primary="History" sx={{ color: "white" }} />
-      </ListItemButton>
+      </ListItemButton> */}
       <ListItemButton
         onClick={() => {
           return routeToPage(DASHBOARD_ROUTES.SETTINGS);

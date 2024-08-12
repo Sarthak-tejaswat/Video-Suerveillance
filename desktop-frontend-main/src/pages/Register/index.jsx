@@ -35,7 +35,7 @@ const CustomButton = styled(Button)(({ theme }) => ({
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required().label("First Name"),
   lastName: Yup.string().required().label("Last Name"),
-  email: Yup.string().required().email().label("email").min(3).max(36),
+  email: Yup.string().required().email().label("Email").min(3).max(36),
   password: Yup.string()
     .required()
     .min(8)
@@ -65,92 +65,82 @@ export default function Register() {
   const userState = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const [openSnackBar, setOpenSnackBar] = useState(false);
   const [snackMessage, setSnackMessage] = useState({
     type: "success",
     message: "",
   });
+  const [openSnackBar, setOpenSnackBar] = useState(false);
 
-  async function createTheSystem() {
-    if (!userState?.token) {
-      return;
+  useEffect(() => {
+    if (userState?.email) {
+      navigate("/");
     }
+  }, [userState?.email, navigate]);
+
+  useEffect(() => {
+    if (userState?.auth && !userState?.CCTV_System) {
+      createSystem();
+    } else if (userState?.auth && userState?.CCTV_System?.id) {
+      setLoading(false);
+      navigate("/");
+    } else if (userState?.dataStatus === "error") {
+      setLoading(false);
+      setSnackMessage({ type: "error", message: "Error occurred!" });
+      setOpenSnackBar(true);
+    }
+  }, [userState, navigate]);
+
+  const createSystem = async () => {
+    if (!userState?.token) return;
+
     try {
       const response = await api.cctv.createSystem(
         { cameraCount: 0 },
         userState?.token
       );
-
       if (response?.data?.status === 201) {
         dispatch(updateSystemStatus(response?.data?.data));
-        const systemResponse = await api.local_camera.sendSystemId(
+        await api.local_camera.sendSystemId(
           response?.data?.data?.CCTV_System?.id
         );
       } else {
-        // error occured in creating the system
         setSnackMessage({
           type: "error",
-          message: "Error occured while creating the system",
+          message: "Error occurred while creating the system",
         });
         setOpenSnackBar(true);
       }
     } catch (error) {
-      // Add a snack message saying that error occured
-      setSnackMessage({ type: "error", message: "A network error occured" });
+      setSnackMessage({ type: "error", message: "A network error occurred" });
       setOpenSnackBar(true);
     }
-  }
+  };
 
-  useEffect(() => {
+  const signUpUser = async (user) => {
+    setLoading(true);
+
     if (userState?.email) {
       navigate("/");
+      return;
     }
-  }, []);
 
-  useEffect(() => {
-    if (userState?.auth && !userState?.CCTV_System) {
-      createTheSystem();
-    } else if (userState?.auth && userState?.CCTV_System?.id) {
-      setLoading(false);
-      navigate("/dashboard/camera");
-    } else if (userState?.dataStatus === "error") {
-      // Error occured
-      setLoading(false);
-      setSnackMessage({ type: "error", message: "Error occured!" });
-      setOpenSnackBar(true);
-    }
-  }, [userState]);
-
-  function handleClick() {
-    setLoading(true);
-  }
-
-  async function signUpUser(user) {
-    if (userState?.email) {
-      navigate("/");
-    }
-    setLoading(true);
-    setTimeout(() => {
-      setSnackMessage({ type: "error", message: "An unknown error occured!" });
-      setOpenSnackBar(true);
-      setLoading(false);
-    }, 10000);
     try {
-      dispatch(registerUser(user));
+      await dispatch(registerUser(user)).unwrap();
     } catch (error) {
-      setLoading(false);
       setSnackMessage({ type: "error", message: error.message });
       setOpenSnackBar(true);
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div>
       <Helmet>
         <style>
-          {"body { background-image: " +
-            `url(${REGISTER_IMAGE})` +
-            "; overflow: hidden; background-repeat: no-repeat; background-size: cover}"}
+          {"body { background-image: url(" +
+            REGISTER_IMAGE +
+            "); overflow: hidden; background-repeat: no-repeat; background-size: cover; }"}
         </style>
       </Helmet>
       <Stack direction="column">
@@ -163,157 +153,133 @@ export default function Register() {
               position: "absolute",
               top: "10%",
               left: "35%",
-              elevation: 15,
             }}
           >
             <div style={{ paddingLeft: "10%", paddingTop: 50, width: "80%" }}>
-              <div style={{ width: "100%", alignContent: "center" }}>
-                <h2
-                  style={{
-                    fontSize: 36,
-                    fontFamily: "Inter",
-                    margin: 0,
-                    alignSelf: "center",
-                  }}
-                >
-                  Register With Us
-                </h2>
-                <SnackBarComponent
-                  type={snackMessage.type}
-                  message={snackMessage.message}
-                  open={openSnackBar}
-                  setOpen={setOpenSnackBar}
-                />
-              </div>
+              <h2
+                style={{
+                  fontSize: 36,
+                  fontFamily: "Inter",
+                  margin: 0,
+                  alignSelf: "center",
+                }}
+              >
+                Register With Us
+              </h2>
+              <SnackBarComponent
+                type={snackMessage.type}
+                message={snackMessage.message}
+                open={openSnackBar}
+                setOpen={setOpenSnackBar}
+              />
               <HeightBox height={30} />
-              <Stack direction="column" spacing={2}>
-                <Formik
-                  initialValues={{
-                    firstName: "",
-                    lastName: "",
-                    email: "",
-                    password: "",
-                    confirmPassword: "",
-                  }}
-                  onSubmit={(values) => {
-                    handleClick();
-                    const user = {
-                      firstName: values.firstName,
-                      lastName: values.lastName,
-                      email: values.email,
-                      password: values.password,
-                    };
-                    signUpUser(user);
-                    console.log(user);
-                  }}
-                  validationSchema={validationSchema}
-                >
-                  {(formikProps) => {
-                    const { errors, handleSubmit, handleChange, touched } =
-                      formikProps;
-
-                    return (
-                      <React.Fragment>
-                        <CustomTextField
-                          label="First Name"
-                          id="firstName"
-                          variant="outlined"
-                          error={errors.firstName && touched.firstName}
-                          helperText={
-                            touched.firstName && errors.firstName
-                              ? errors.firstName
-                              : ""
-                          }
-                          onChange={(event) => handleChange("firstName")(event)}
-                        />
-
-                        <CustomTextField
-                          label="Last Name"
-                          id="lastName"
-                          variant="outlined"
-                          error={errors.lastName && touched.lastName}
-                          helperText={
-                            touched.lastName && errors.lastName
-                              ? errors.lastName
-                              : ""
-                          }
-                          onChange={(event) => handleChange("lastName")(event)}
-                        />
-
-                        <CustomTextField
-                          label="Email"
-                          id="email"
-                          variant="outlined"
-                          error={errors.email && touched.email}
-                          helperText={
-                            touched.email && errors.email ? errors.email : ""
-                          }
-                          onChange={(event) => handleChange("email")(event)}
-                        />
-
-                        <CustomTextField
-                          label="Password"
-                          variant="outlined"
-                          id="password"
-                          type="password"
-                          error={errors.password && touched.password}
-                          helperText={
-                            touched.password && errors.password
-                              ? errors.password
-                              : ""
-                          }
-                          onChange={(event) => handleChange("password")(event)}
-                        />
-
-                        <CustomTextField
-                          label="Confirm Password"
-                          variant="outlined"
-                          id="confirmPassword"
-                          type="password"
-                          error={
-                            errors.confirmPassword && touched.confirmPassword
-                          }
-                          helperText={
-                            touched.confirmPassword && errors.confirmPassword
-                              ? errors.confirmPassword
-                              : ""
-                          }
-                          onChange={(event) =>
-                            handleChange("confirmPassword")(event)
-                          }
-                        />
-
-                        <Stack direction="row">
-                          <Button
-                            sx={{ width: "100%" }}
-                            variant="text"
-                            style={{ textTransform: "none" }}
-                            onClick={() => navigate("/")}
-                          >
-                            Sign In
-                          </Button>
-                          <CustomButton
-                            type="submit"
-                            variant="contained"
-                            size="large"
-                            onClick={handleSubmit}
-                            // onClick={()=> navigate("/dashboard")} //should remove later
-                            disabled={loading}
-                            sx={{ backgroundColor: "#6C63FF" }}
-                          >
-                            {loading ? <CircularProgress /> : "Register"}
-                          </CustomButton>
-                        </Stack>
-                      </React.Fragment>
-                    );
-                  }}
-                </Formik>
-                <HeightBox height={15} />
-              </Stack>
+              <Formik
+                initialValues={{
+                  firstName: "",
+                  lastName: "",
+                  email: "",
+                  password: "",
+                  confirmPassword: "",
+                }}
+                validationSchema={validationSchema}
+                onSubmit={(values) => {
+                  const user = {
+                    firstName: values.firstName,
+                    lastName: values.lastName,
+                    email: values.email,
+                    password: values.password,
+                  };
+                  signUpUser(user);
+                }}
+              >
+                {({ errors, handleSubmit, handleChange, touched }) => (
+                  <>
+                    <CustomTextField
+                      label="First Name"
+                      id="firstName"
+                      variant="outlined"
+                      error={errors.firstName && touched.firstName}
+                      helperText={
+                        touched.firstName && errors.firstName
+                          ? errors.firstName
+                          : ""
+                      }
+                      onChange={handleChange("firstName")}
+                    />
+                    <CustomTextField
+                      label="Last Name"
+                      id="lastName"
+                      variant="outlined"
+                      error={errors.lastName && touched.lastName}
+                      helperText={
+                        touched.lastName && errors.lastName
+                          ? errors.lastName
+                          : ""
+                      }
+                      onChange={handleChange("lastName")}
+                    />
+                    <CustomTextField
+                      label="Email"
+                      id="email"
+                      variant="outlined"
+                      error={errors.email && touched.email}
+                      helperText={
+                        touched.email && errors.email ? errors.email : ""
+                      }
+                      onChange={handleChange("email")}
+                    />
+                    <CustomTextField
+                      label="Password"
+                      id="password"
+                      variant="outlined"
+                      type="password"
+                      error={errors.password && touched.password}
+                      helperText={
+                        touched.password && errors.password
+                          ? errors.password
+                          : ""
+                      }
+                      onChange={handleChange("password")}
+                    />
+                    <CustomTextField
+                      label="Confirm Password"
+                      id="confirmPassword"
+                      variant="outlined"
+                      type="password"
+                      error={errors.confirmPassword && touched.confirmPassword}
+                      helperText={
+                        touched.confirmPassword && errors.confirmPassword
+                          ? errors.confirmPassword
+                          : ""
+                      }
+                      onChange={handleChange("confirmPassword")}
+                    />
+                    <Stack direction="row">
+                      <Button
+                        sx={{ width: "100%" }}
+                        variant="text"
+                        style={{ textTransform: "none" }}
+                        onClick={() => navigate("/")}
+                      >
+                        Sign In
+                      </Button>
+                      <CustomButton
+                        type="submit"
+                        variant="contained"
+                        size="large"
+                        onClick={handleSubmit}
+                        disabled={loading}
+                      >
+                        {loading ? <CircularProgress /> : "Register"}
+                      </CustomButton>
+                    </Stack>
+                  </>
+                )}
+              </Formik>
+              <HeightBox height={15} />
             </div>
           </Paper>
         </Stack>
-
         <HeightBox height={15} />
       </Stack>
     </div>

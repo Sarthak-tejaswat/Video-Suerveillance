@@ -6,11 +6,13 @@ import * as moment from "moment";
 import api from "../../../api";
 import RecordVideoItem from "../../../components/RecordVideoItem";
 import HeightBox from "../../../components/HeightBox";
+import { useNavigate } from "react-router-dom";
 
 export default function ProcessedVideo() {
   const today = new Date();
   const [value, setValue] = useState(moment(today).format("YYYY-MM-DD"));
   const [recordVideos, setRecordVideos] = useState([]);
+  const navigate = useNavigate();
 
   async function getRecordIds(date) {
     try {
@@ -32,6 +34,22 @@ export default function ProcessedVideo() {
 
   return (
     <div style={{ paddingLeft: 20 }}>
+      <button
+        style={{
+          marginTop: "100px",
+          marginLeft: "2px",
+          width: "200px",
+          paddingBlock: "10px",
+          border: "none",
+          backgroundColor: "#433D8B",
+          color: "white",
+          borderRadius: "10px",
+          cursor: "pointer",
+        }}
+        onClick={() => navigate("/dashboard")}
+      >
+        ◀︎ Back To Dashboard
+      </button>
       <h3>Recorded Videos</h3>
       <Stack direction="row" alignItems="center" spacing={3}>
         <h4>Select date : </h4>

@@ -9,7 +9,7 @@ import CameraSection from "../pages/Dashboard/sections/camera";
 import IntelligentModel from "../pages/Dashboard/sections/model";
 import IntrusionSection from "../pages/Dashboard/sections/intrusion";
 import Settings from "../pages/Dashboard/sections/settings";
-import HistorySection from "../pages/Dashboard/sections/history";
+import ProcessedVideo from "../pages/Dashboard/sections/processedVideo";
 
 export default function Router() {
   const [openPane, setOpenPane] = React.useState();
@@ -24,7 +24,8 @@ export default function Router() {
         <Route path="/dashboard/camera" element={<CameraSection />} />
         <Route path="/dashboard/intrusion" element={<IntrusionSection />} />
         <Route path="/dashboard/settings" element={<Settings />} />
-        <Route path="/dashboard/history" element={<HistorySection />} />
+        <Route path="/dashboard/processed" element={<ProcessedVideo />} />
+
         <Route
           path="/dashboard/intelligentModel"
           element={<IntelligentModel />}

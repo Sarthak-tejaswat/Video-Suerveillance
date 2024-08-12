@@ -28,7 +28,9 @@ import LogoutTwoToneIcon from "@mui/icons-material/LogoutTwoTone";
 import { convertLength } from "@mui/material/styles/cssUtils";
 import IntelligentModel from "./sections/model";
 import { Helmet } from "react-helmet";
+import UserInfo from "./sections/About";
 import Camera_Image from "../../assets/images/Camera.jpeg";
+import axios from "axios";
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -80,6 +82,8 @@ export default function Dashboard({ openPane, setOpenPane }) {
   const userState = useSelector((state) => state.user);
   const disptach = useDispatch();
   const [open, setOpen] = React.useState(true);
+  const [users, setUsers] = React.useState([]);
+  const [error, setError] = React.useState(null);
 
   const location = useLocation();
 
@@ -98,6 +102,18 @@ export default function Dashboard({ openPane, setOpenPane }) {
     }
   }, [userState]);
 
+  React.useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/get/users");
+        setUsers(response.data);
+      } catch (err) {
+        setError(err);
+      }
+    };
+
+    fetchUsers();
+  }, []);
   React.useEffect(() => {
     const params = location.pathname.split("/");
 
@@ -152,7 +168,7 @@ export default function Dashboard({ openPane, setOpenPane }) {
           <style>
             {"body { background-image: " +
               `url(${Camera_Image})` +
-              ";overflow: hidden; background-repeat: no-repeat; background-size:cover;}"}
+              ";overflow: hidden; background-repeat: no-repeat; background-size:cover;background-size:100vw 100vh}"}
           </style>
         </Helmet>
         <CssBaseline />
@@ -215,90 +231,68 @@ export default function Dashboard({ openPane, setOpenPane }) {
             </Button>
           </Toolbar>
         </AppBar>
-        {/* <Drawer
-        variant="permanent"
-        open={open}
-        sx={{
-          marginBlock: "70px",
-          overflowX: "none",
-        }}
-      >
-        <List component="nav">
-          <IconButton
-            onClick={toggleDrawer}
-            sx={{
-              width: "100%",
-              borderRadius: "10px",
-              ...(!open && { display: "none" }),
-              "&:hover": {
-                backgroundColor: "rgba(0,0,0,0.05)",
-              },
-            }}
-          >
-            <ChevronLeftIcon
-              color="secondary"
-              sx={{
-                marginLeft: "50px",
-              }}
-            />
-            <Typography
-              component="h1"
-              variant="h6"
-              color="red"
-              noWrap
-              sx={{
-                flexGrow: 1,
-                marginRight: "75px",
-              }}
-            >
-              Close
-            </Typography>
-          </IconButton>
-          <IconButton
-            edge="end"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={toggleDrawer}
-            sx={{
-              marginLeft: "12px",
-              ...(open && { display: "none" }),
-            }}
-          >
-            <MenuIcon color="inherit" />
-          </IconButton>
-          <MainListItems />
-        </List>
-      </Drawer> */}
 
         {/* ---------------Side pane and open pane separation ---------------- */}
-
-        {open ? (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
           <div
             style={{
               display: "flex",
-              width: "80vw",
-              height: "100vh",
-              margin: "auto",
-              flexWrap: "wrap",
+              flexDirection: "column",
+              justifyContent: "center",
+              height: "50vh",
+              width: "50vw",
+              padding: "6%",
+              paddingTop: "10%",
+              color: "white",
             }}
           >
-            <MainListItems setOpen={setOpen} />
+            <h1>
+              Welcome, <UserInfo />
+            </h1>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere
+              sequi, a earum expedita minima repellat, tenetur asperiores fugiat
+              molestias tempore neque voluptatibus perspiciatis odio explicabo
+              veniam sint nobis voluptates eius error ratione adipisci
+              molestiae. Quam, atque aliquid illo vel suscipit alias voluptatem
+              labore quae modi veritatis doloribus dolore dignissimos velit.
+            </p>
           </div>
-        ) : (
-          <Box
-            component="main"
-            sx={{
-              flexGrow: 1,
-              height: "100vh",
-              overflow: "auto",
-              boxShadow: "inset 0px 1px 10px 2px rgba(0,0,0,0.3)",
-            }}
-          >
-            <Toolbar sx={{ boxShadow: " 0px 2px 10px 2px rgba(0,0,0,0.3)" }} />
+          {open ? (
+            <div
+              style={{
+                display: "flex",
+                width: "100vw",
+                height: "50vh",
+                paddingInline: "5%",
+                flexWrap: "wrap",
+              }}
+            >
+              <MainListItems setOpen={setOpen} />
+            </div>
+          ) : (
+            <Box
+              component="main"
+              sx={{
+                flexGrow: 1,
+                height: "100vh",
+                overflow: "auto",
+                boxShadow: "inset 0px 1px 10px 2px rgba(0,0,0,0.3)",
+              }}
+            >
+              <Toolbar
+                sx={{ boxShadow: " 0px 2px 10px 2px rgba(0,0,0,0.3)" }}
+              />
 
-            {openPane}
-          </Box>
-        )}
+              {openPane}
+            </Box>
+          )}
+        </div>
       </Box>
       <footer
         style={{
