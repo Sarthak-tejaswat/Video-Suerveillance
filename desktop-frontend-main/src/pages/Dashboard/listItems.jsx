@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import { DASHBOARD_ROUTES } from "../../constants";
 import { Box } from "@mui/material";
-import HistoryIcon from "@mui/icons-material/History";
+
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 
 export default function MainListItems({ setOpen }) {

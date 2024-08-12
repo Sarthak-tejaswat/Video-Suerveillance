@@ -3,7 +3,6 @@ export const DASHBOARD_ROUTES = {
   INTRUSIONS: "intrusion",
   SETTINGS: "settings",
   PROCESSEDVIDEOS: "processed",
-  HISTORY: "history",
   MODEL: "intelligentModel",
 };
 

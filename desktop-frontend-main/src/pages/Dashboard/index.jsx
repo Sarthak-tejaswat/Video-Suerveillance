@@ -8,12 +8,9 @@ import MuiDrawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
+
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+
 import MainListItems from "./listItems";
 import { Button } from "@mui/material";
 import { DASHBOARD_ROUTES } from "../../constants";
@@ -21,11 +18,11 @@ import CameraSection from "./sections/camera";
 import IntrusionSection from "./sections/intrusion";
 import Settings from "./sections/settings";
 import ProcessedVideo from "./sections/processedVideo";
-import HistorySection from "./sections/history";
+
 import { logOutUser } from "../../reducers/userSlice";
 import { getCameras } from "../../reducers/cameraSlice";
 import LogoutTwoToneIcon from "@mui/icons-material/LogoutTwoTone";
-import { convertLength } from "@mui/material/styles/cssUtils";
+
 import IntelligentModel from "./sections/model";
 import { Helmet } from "react-helmet";
 import UserInfo from "./sections/About";
@@ -136,10 +133,7 @@ export default function Dashboard({ openPane, setOpenPane }) {
           setOpenPane(<ProcessedVideo />);
 
           break;
-        case DASHBOARD_ROUTES.HISTORY:
-          setOpenPane(<HistorySection />);
 
-          break;
         case DASHBOARD_ROUTES.MODEL:
           setOpenPane(<IntelligentModel />);
 
