@@ -2,6 +2,7 @@ import * as React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
+import { Helmet } from "react-helmet";
 import { useLocation } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -24,7 +25,6 @@ import { getCameras } from "../../reducers/cameraSlice";
 import LogoutTwoToneIcon from "@mui/icons-material/LogoutTwoTone";
 
 import IntelligentModel from "./sections/model";
-import { Helmet } from "react-helmet";
 import UserInfo from "./sections/About";
 import Camera_Image from "../../assets/images/Camera.jpeg";
 import axios from "axios";

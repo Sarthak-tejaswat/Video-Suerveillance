@@ -8,12 +8,20 @@ import { useSelector } from "react-redux";
 export default function VideoArea(props) {
   const cameras = useSelector((state) => state.camera);
   return (
-    <Grid container spacing={5} justifyContent="center">
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        gap: "8px",
+        flexWrap: "wrap",
+        marginInline: -20,
+      }}
+    >
       {cameras?.cameras.map((videoClip) => {
         return (
-          <Grid item xs="auto" key={videoClip?.id}>
+          <div key={videoClip?.id}>
             <VideoItem videoClip={videoClip} index={videoClip?.id} />
-          </Grid>
+          </div>
         );
       })}
       {cameras?.cameras?.length === 0 && (
@@ -24,6 +32,6 @@ export default function VideoArea(props) {
           </p>
         </div>
       )}
-    </Grid>
+    </div>
   );
 }

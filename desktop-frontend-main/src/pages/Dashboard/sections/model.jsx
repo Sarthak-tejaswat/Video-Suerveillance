@@ -145,14 +145,14 @@ export default function IntelligentModel() {
               fontWeight: "800",
             }}
           >
-            Azranta
+            Video Surveillance
           </Typography>
           <Typography
             component="h1"
             variant="h6"
             color="inherit"
             noWrap
-            sx={{ flexGrow: 1 }}
+            sx={{ flexGrow: 1.2 }}
           >
             Intelligent Models Section
           </Typography>

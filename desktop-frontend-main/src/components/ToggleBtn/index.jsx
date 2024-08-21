@@ -15,7 +15,7 @@ export default function ToggleBtn(props) {
       }
       style={{ textTransform: "none" }}
       disabled={loading || disabled}
-      sx={{ width: 170 }}
+      sx={{ width: 200, backgroundColor: "#433D8B", borderRadius: "10px" }}
       onClick={() => {
         if (props.state === "RUNNING") {
           props.setState("STOP");

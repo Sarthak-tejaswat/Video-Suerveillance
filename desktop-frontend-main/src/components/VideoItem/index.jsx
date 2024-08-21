@@ -69,7 +69,7 @@ export default function VideoItem(props) {
     <div
       style={{
         backgroundColor: "white",
-        width: 380,
+        width: 300,
         boxShadow:
           "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
         marginBottom: "25px",
@@ -79,7 +79,7 @@ export default function VideoItem(props) {
         <img
           src={`${LOCAL_URL}/video_feed/${videoClip?.id}`}
           alt="CCTV video"
-          style={{ width: "380px", height: "240px" }}
+          style={{ width: "300px", height: "190px" }}
           onError={(event) => {
             event.target.src =
               "https://www.svgrepo.com/show/343419/computer-error.svg";
@@ -90,8 +90,8 @@ export default function VideoItem(props) {
       {reloadImage && (
         <div
           style={{
-            width: 380,
-            height: 260,
+            width: 300,
+            height: 190,
             justifyContent: "center",
             alignItems: "center",
             display: "flex",
@@ -122,15 +122,8 @@ export default function VideoItem(props) {
               <RefreshIcon />
             </IconButton>
           )}
-          <div
-            style={{
-              justifyContent: "center",
-              marginLeft: "auto",
-              marginRight: "auto",
-              textAlign: "center",
-            }}
-          >
-            <Stack direction="row" spacing={1}>
+          <div>
+            <Stack direction="column" spacing={1}>
               <ToggleBtn
                 state={videoClip?.status}
                 setState={updateCameraStatus}
@@ -141,12 +134,12 @@ export default function VideoItem(props) {
                 onClick={delCamera}
                 color="error"
                 disabled={loading}
-                sx={{ width: 170 }}
+                sx={{ width: 200 }}
               >
                 {loading ? <CircularProgress /> : "Delete Camera"}
               </Button>
             </Stack>
-            <HeightBox height={10} />
+            <HeightBox height={6} />
           </div>
         </Stack>
       </div>
